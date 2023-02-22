@@ -7,6 +7,7 @@ import 'package:zarashop/pages/productview_page.dart';
 import 'package:zarashop/pages/search_page.dart';
 
 import '../model/product_model.dart';
+import '../service/fire_database.dart';
 import 'categoryview_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,6 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,185 +77,84 @@ class HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-           children: [
-             const SizedBox(
-              height: 20,
-            ),
-             Container(
-               padding: const EdgeInsets.all(6),
-               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children:  const[
-                   Text(
-                    "Super takliflar",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+      body: RefreshIndicator(
+        onRefresh: () => getProducts(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                padding: const EdgeInsets.all(6),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children:  const[
+                    Text(
+                      "Super takliflar",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Ads
+              const SizedBox(height: 10,),
+              Container(
+                width: double.infinity,
+                height: 220,
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Swiper(
+                  loop: true,
+                  duration: 1000,
+                  autoplayDelay: 5000,
+                  autoplay: true,
+                  control: const SwiperControl(
+                      color: Colors.transparent
                   ),
-                ],
-               ),
-             ),
+                  itemBuilder: (BuildContext context,int index){
+                    return const Image(
+                      image: AssetImage("assets/images/images.webp"),
+                      fit: BoxFit.fill,
+                    );
+                  },
+                  itemCount: 3,
+                  pagination:const SwiperPagination(),
+                ),
+              ),
 
-             // Ads
-             const SizedBox(height: 10,),
-             Container(
-               width: double.infinity,
-               height: 220,
-               margin: const EdgeInsets.symmetric(horizontal: 10),
-               clipBehavior: Clip.hardEdge,
-               decoration: BoxDecoration(
-                 color: Colors.black,
-                 borderRadius: BorderRadius.circular(15),
-               ),
-               child: Swiper(
-                 loop: true,
-                 duration: 1000,
-                 autoplayDelay: 5000,
-                 autoplay: true,
-                 control: const SwiperControl(
-                     color: Colors.transparent
-                 ),
-                 itemBuilder: (BuildContext context,int index){
-                   return const Image(
-                     image: AssetImage("assets/images/images.webp"),
-                     fit: BoxFit.fill,
-                   );
-                 },
-                 itemCount: 3,
-                 pagination:const SwiperPagination(),
-               ),
-             ),
-
-             //Categories
-             Column(
-               children: categories.map((category) => itemOfCategory(category)).toList(),
-             ),
-
-          ],
+              //Categories
+              // SingleChildScrollView(
+              //   scrollDirection: Axis.horizontal,
+              //   child: Row(
+              //       children: items.map((e) {
+              //         return itemOfProduct(e);
+              //       }).toList()
+              //   ),
+              // ),
+              Column(
+                children: items.map((e) => itemOfCategory(e)).toList(),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  List categories = [
-    {
-      "name" : "Texnika",
-      "products" : [
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Texnika", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),   Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Texnika", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),   Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Texnika", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-      ],
-    },
-    {
-      "name" : "Texnika",
-      "products" : [
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Texnika", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),   Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Texnika", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),   Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Texnika", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-      ],
-    },
-    {
-      "name" : "Kiyim",
-      "products" : [
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Texnika", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),   Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Texnika", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),   Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Texnika", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-        Product(name: "IPhone", content: "Dunyoda bitta", imgUrls: [
-          "https://i5.walmartimages.com/asr/6ebc11c1-5018-44bc-b9ae-e58c445c21f1.16c6f07dfde7e01b7349af39cefc2b3a.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-          "https://i5.walmartimages.com/asr/052c9d05-f1a4-45ec-9822-e9ccf7b7be20.8a38a7e88972ab338d8b82e94ca45909.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF",
-        ], category: "Kiyimlar", price: "200 \$"),
-      ],
-    },
-  ];
+  @override
+  void initState() {
+    getProducts();
+    super.initState();
+  }
+
+  List items = [];
+  List category=[];
 
   Widget itemOfCategory(Map category) {
     List<Product> list = category["products"];
@@ -352,6 +254,23 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  Future<void> getProducts() async {
+    await DataService.getProduct().then((value) => {
+      print(value),
+      setState((){
+        items=value;
+      })
+    });
+  }
+
+
+  void getCategory() async {
+    await RTDBService.getCategory().then((value) => {
+      setState((){
+        category=value;
+      })
+    });
+  }
 
 
 }

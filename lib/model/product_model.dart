@@ -1,31 +1,40 @@
+
 class Product {
+  String? content;
+  List? imgUrls;
   String? id;
   String? name;
-  String? content;
-  bool? isAvailable;
-  List<String>? imgUrls;
   String? price;
   String? category;
+  bool? isAvailable;
+  int? buyCount;
+  String? date;
 
 
-  Product({this.id, this.name, this.content,this.isAvailable, this.imgUrls, this.category, this.price});
+  Product({this.date,this.content,this.buyCount,this.category,this.id,this.name,this.price,this.imgUrls,this.isAvailable});
 
-  Product.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json["name"],
-        content = json['content'],
-        isAvailable = json['isAvailable'],
-        price = json['price'],
-        category = json["category"],
-        imgUrls = json['imgUrls'];
+  Product.fromJson(Map<String,dynamic> json) {
+    date=json['date'];
+    content=json['content'];
+    imgUrls=json['imgUrls'];
+    id=json['id'];
+    name=json['name'];
+    price=json['price'];
+    category=json['category'];
+    isAvailable=json['isAvailable'];
+    buyCount=json['buyCount'];
+  }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name' : name,
-    'content': content,
-    "isAvailable" : isAvailable,
-    'imgUrls': imgUrls,
-    'category' : category,
-    'price': price,
+    "content":content,
+    "date":date,
+    "imgUrls":imgUrls,
+    "buyCount":buyCount,
+    "id":id,
+    "name":name,
+    "price":price,
+    "category":category,
+    "isAvailable":isAvailable
   };
+
 }
