@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../pages/main_page.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -18,17 +17,19 @@ class _LoginScreenState extends State<LoginScreen> {
   bool otpVisibility = false;
   User? user;
   String verificationID = "";
-  bool isLoading =  false;
+  bool isLoading = false;
 
   static final _auth = FirebaseAuth.instance;
-
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Scaffold(
-
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text("Ro'yxatdan o'tish"),
+          ),
           body: Container(
             margin: const EdgeInsets.all(10),
             child: Column(
@@ -85,13 +86,14 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-        (isLoading) ?
-        Scaffold(
-          backgroundColor: Colors.grey.withOpacity(.3),
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ) : SizedBox(),
+        (isLoading)
+            ? Scaffold(
+                backgroundColor: Colors.grey.withOpacity(.3),
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : SizedBox(),
       ],
     );
   }
@@ -129,13 +131,13 @@ class _LoginScreenState extends State<LoginScreen> {
         verificationId: verificationID, smsCode: otpController.text);
 
     await auth.signInWithCredential(credential).then(
-          (value) {
+      (value) {
         setState(() {
           user = FirebaseAuth.instance.currentUser;
         });
       },
     ).whenComplete(
-          () {
+      () {
         if (user != null) {
           Fluttertoast.showToast(
             msg: "You are logged in successfully",
@@ -169,6 +171,5 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void LogOut() async {
     await _auth.signOut();
-
   }
 }

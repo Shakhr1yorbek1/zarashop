@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class marketPage extends StatefulWidget {
@@ -11,9 +10,6 @@ class marketPage extends StatefulWidget {
 class _marketPageState extends State<marketPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-
-    );
+    return Scaffold();
   }
 }

@@ -11,7 +11,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBar(
+      appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.deepOrange),
         actions: [
@@ -19,7 +19,7 @@ class _SearchPageState extends State<SearchPage> {
             padding: const EdgeInsets.only(left: 50),
             width: MediaQuery.of(context).size.width,
             height: 100,
-            child:  Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
@@ -29,7 +29,7 @@ class _SearchPageState extends State<SearchPage> {
                     color: Colors.black26,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child:  Container(
+                  child: Container(
                     padding: const EdgeInsets.all(4),
                     child: const TextField(
                       decoration: InputDecoration(
@@ -60,5 +60,4 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
-
 }

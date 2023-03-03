@@ -18,8 +18,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,12 +28,15 @@ class HomePageState extends State<HomePage> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: 100,
-            child:  Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, CupertinoPageRoute(builder: (context) => const SearchPage()));
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => const SearchPage()));
                   },
                   child: Container(
                     width: 300,
@@ -44,16 +45,24 @@ class HomePageState extends State<HomePage> {
                       color: Colors.black26,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child:  Container(
+                    child: Container(
                       padding: const EdgeInsets.all(4),
                       child: Row(
                         children: const [
-                          SizedBox(width: 10,),
-                          Icon(Icons.search, color: Colors.deepOrange,),
-                          Text("Search", style: TextStyle(color: Colors.orange, fontSize: 16),),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.search,
+                            color: Colors.deepOrange,
+                          ),
+                          Text(
+                            "Search",
+                            style:
+                                TextStyle(color: Colors.orange, fontSize: 16),
+                          ),
                         ],
                       ),
-
                     ),
                   ),
                 ),
@@ -61,8 +70,11 @@ class HomePageState extends State<HomePage> {
                   width: 15,
                 ),
                 GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchPage()));
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SearchPage()));
                   },
                   child: CircleAvatar(
                     backgroundColor: Colors.orange,
@@ -78,7 +90,7 @@ class HomePageState extends State<HomePage> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => getProducts(),
+        onRefresh: () => getCategory(getCategory),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -89,17 +101,20 @@ class HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children:  const[
+                  children: const [
                     Text(
                       "Super takliflar",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                     ),
                   ],
                 ),
               ),
 
               // Ads
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               Container(
                 width: double.infinity,
                 height: 220,
@@ -114,17 +129,15 @@ class HomePageState extends State<HomePage> {
                   duration: 1000,
                   autoplayDelay: 5000,
                   autoplay: true,
-                  control: const SwiperControl(
-                      color: Colors.transparent
-                  ),
-                  itemBuilder: (BuildContext context,int index){
+                  control: const SwiperControl(color: Colors.transparent),
+                  itemBuilder: (BuildContext context, int index) {
                     return const Image(
                       image: AssetImage("assets/images/images.webp"),
                       fit: BoxFit.fill,
                     );
                   },
                   itemCount: 3,
-                  pagination:const SwiperPagination(),
+                  pagination: const SwiperPagination(),
                 ),
               ),
 
@@ -138,7 +151,7 @@ class HomePageState extends State<HomePage> {
               //   ),
               // ),
               Column(
-                children: items.map((e) => itemOfCategory(e)).toList(),
+                children: category.map((e) => itemOfProduct(e)).toList(),
               )
             ],
           ),
@@ -150,11 +163,12 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     getProducts();
+    getCategory(getCategory);
     super.initState();
   }
 
   List items = [];
-  List category=[];
+  List category = [];
 
   Widget itemOfCategory(Map category) {
     List<Product> list = category["products"];
@@ -162,17 +176,23 @@ class HomePageState extends State<HomePage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: const EdgeInsets.only(right: 10,left: 10),
+          padding: const EdgeInsets.only(right: 10, left: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children:  [
+            children: [
               Text(
                 category["name"],
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
               ),
               TextButton(
-                onPressed:   () {
-                  Navigator.push(context, CupertinoPageRoute(builder: (context) => CategoryViewPage(category: category,)));
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) => CategoryViewPage(
+                                category: category,
+                              )));
                 },
                 child: const Text(
                   "Yana",
@@ -184,9 +204,7 @@ class HomePageState extends State<HomePage> {
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-              children: list.map((e) => itemOfProduct(e)).toList()
-          ),
+          child: Row(children: list.map((e) => itemOfProduct(e)).toList()),
         ),
       ],
     );
@@ -194,8 +212,11 @@ class HomePageState extends State<HomePage> {
 
   Widget itemOfProduct(Product product) {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => ProductViewPage(product: product)));
+      onTap: () {
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+                builder: (context) => ProductViewPage(product: product)));
       },
       child: Container(
         clipBehavior: Clip.hardEdge,
@@ -203,10 +224,7 @@ class HomePageState extends State<HomePage> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
-            boxShadow: const [
-              BoxShadow(color: Colors.grey, blurRadius: 5)
-            ]
-        ),
+            boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 5)]),
         child: Column(
           children: [
             Container(
@@ -215,36 +233,50 @@ class HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
                 ),
-                child: CachedNetworkImage(
-                  imageUrl: product.imgUrls!.first,
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: Colors.red,
-                    highlightColor: Colors.yellow,
-                    child: const Center(
-                      child: Text(
-                        'Zara shop',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 40.0,
-                          fontWeight:
-                          FontWeight.bold,
+                child: product.imgUrls!.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: product.imgUrls!.first,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.red,
+                          highlightColor: Colors.yellow,
+                          child: const Center(
+                            child: Text(
+                              'Zara shop',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 40.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                )
-            ),
+                        fit: BoxFit.cover,
+                      )
+                    : Image(
+                        fit: BoxFit.cover,
+                        image: AssetImage("assets/images/rasm.png"),
+                      )),
             Container(
               width: 180,
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.name!,
-                    style: const TextStyle(fontSize: 22, overflow: TextOverflow.ellipsis,),
+                  Text(
+                    product.name!,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  const SizedBox(height: 10,),
-                  Text(product.price!, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    product.price!,
+                    style: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
@@ -256,29 +288,19 @@ class HomePageState extends State<HomePage> {
 
   Future<void> getProducts() async {
     await DataService.getProduct().then((value) => {
-      print(value),
-      setState((){
-        items=value;
-      })
-    });
+          print(value),
+          setState(() {
+            items = value;
+          })
+        });
   }
 
-
-  void getCategory() async {
+ Future<void> getCategory(getProduct) async {
     await RTDBService.getCategory().then((value) => {
-      setState((){
-        category=value;
-      })
-    });
+          setState(() {
+            category = value;
+          })
+        });
   }
-
 
 }
-
-
-
-
-
-
-
-

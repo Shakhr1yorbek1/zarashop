@@ -12,7 +12,7 @@ class DataService {
 
   static Future<List<Product>> getProduct() async {
     List<Product> p = [];
-    var docs= await _firestore.collection("Products").get();
+    var docs = await _firestore.collection("Products").get();
     for (var a in docs.docs) {
       p.add(Product.fromJson(a.data()));
     }

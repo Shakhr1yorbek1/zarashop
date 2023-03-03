@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:zarashop/pages/home_page.dart';
+import 'package:zarashop/pages/main_page.dart';
 import '../model/Utils.dart';
 
 import '../register_page/phone.dart';
@@ -13,13 +14,11 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   void doSignOut() {
-    AuthService.signOutUser().then((value) =>
-    {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen())),
-    });
+    AuthService.signOutUser().then((value) => {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MainPage())),
+        });
   }
 
   @override
@@ -31,18 +30,21 @@ class _SettingPageState extends State<SettingPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              bool yes = await Utils.commanDialog(
-                  context, "Profildan chiqish", "Profildan chiqmoqchimisiz?",
-                  "Ha", "Yo'q", false);
+              bool yes = await Utils.commanDialog(context, "Profildan chiqish",
+                  "Profildan chiqmoqchimisiz?", "Ha", "Yo'q", false);
               if (yes) {
                 doSignOut();
               }
             },
-            icon: const Icon(Icons.exit_to_app_sharp, color: Colors.black,),
+            icon: const Icon(
+              Icons.exit_to_app_sharp,
+              color: Colors.black,
+            ),
           )
         ],
-        title: const Text("Profile", style: TextStyle(
-            color: Colors.black, fontFamily: "billabong", fontSize: 28)),
+        title: const Text("Profile",
+            style: TextStyle(
+                color: Colors.black, fontFamily: "billabong", fontSize: 28)),
       ),
     );
   }

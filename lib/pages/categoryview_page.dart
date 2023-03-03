@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ class CategoryViewPage extends StatefulWidget {
 }
 
 class _CategoryViewPageState extends State<CategoryViewPage> {
-
   List<Product> items = [];
   void parseData() {
     setState(() {
@@ -34,12 +32,14 @@ class _CategoryViewPageState extends State<CategoryViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.category!["name"], style: const TextStyle(color: Colors.black)),
+        title: Text(widget.category!["name"],
+            style: const TextStyle(color: Colors.black)),
         iconTheme: const IconThemeData(color: Colors.deepOrange),
         backgroundColor: Colors.white,
       ),
       body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 2/2.9),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, childAspectRatio: 2 / 2.9),
         itemCount: items.length,
         itemBuilder: (context, index) {
           return itemOfProduct(items[index]);
@@ -50,8 +50,11 @@ class _CategoryViewPageState extends State<CategoryViewPage> {
 
   Widget itemOfProduct(Product product) {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => ProductViewPage(product: product)));
+      onTap: () {
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+                builder: (context) => ProductViewPage(product: product)));
       },
       child: Container(
         clipBehavior: Clip.hardEdge,
@@ -59,10 +62,7 @@ class _CategoryViewPageState extends State<CategoryViewPage> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
-            boxShadow: [
-              const BoxShadow(color: Colors.grey, blurRadius: 5)
-            ]
-        ),
+            boxShadow: [const BoxShadow(color: Colors.grey, blurRadius: 5)]),
         child: Column(
           children: [
             Container(
@@ -82,25 +82,35 @@ class _CategoryViewPageState extends State<CategoryViewPage> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 40.0,
-                          fontWeight:
-                          FontWeight.bold,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
-                )
-            ),
+                )),
             Container(
               width: 180,
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.name!,
-                    style: const TextStyle(fontSize: 22, overflow: TextOverflow.ellipsis,),
+                  Text(
+                    product.name!,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  const SizedBox(height: 10,),
-                  Text(product.price!, style: const TextStyle(overflow: TextOverflow.ellipsis,fontSize: 16, fontWeight: FontWeight.bold),),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    product.price!,
+                    style: const TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
@@ -109,5 +119,4 @@ class _CategoryViewPageState extends State<CategoryViewPage> {
       ),
     );
   }
-
 }

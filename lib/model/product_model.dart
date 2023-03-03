@@ -13,7 +13,7 @@ class Product {
 
   Product({this.date,this.content,this.buyCount,this.category,this.id,this.name,this.price,this.imgUrls,this.isAvailable});
 
-  Product.fromJson(Map<String,dynamic> json) {
+  Product.fromJson(Map<dynamic,dynamic> json) {
     date=json['date'];
     content=json['content'];
     imgUrls=json['imgUrls'];
@@ -25,7 +25,7 @@ class Product {
     buyCount=json['buyCount'];
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
     "content":content,
     "date":date,
     "imgUrls":imgUrls,

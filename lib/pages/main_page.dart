@@ -1,11 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:zarashop/pages/settings_page.dart';
-
+import '../register_page/phone.dart';
+import '../service/auth_service.dart';
 import 'home_page.dart';
 import 'likes_page.dart';
 import 'market_page.dart';
-
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -16,11 +18,11 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-   HomePage(),
-    LikesPage(),
-    marketPage(),
-    SettingPage(),
+  static final List<Widget> _widgetOptions = <Widget>[
+    HomePage(),
+    (AuthService.isLoggedIn()) ? const LikesPage() : LoginScreen(),
+    (AuthService.isLoggedIn()) ? const marketPage() : LoginScreen(),
+    (AuthService.isLoggedIn()) ? const SettingPage() : LoginScreen(),
   ];
 
   @override
@@ -43,78 +45,98 @@ class _MainPageState extends State<MainPage> {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-            child:GNav(
-                rippleColor: Colors.grey[300]!,
-                hoverColor: Colors.grey[100]!,
-                gap: 8,
-                activeColor: Colors.white,
-                iconSize: 24,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                duration: const Duration(milliseconds: 400),
-                tabBackgroundColor: Colors.grey[100]!,
-                color: Colors.black,
-                tabs:const [
-                  GButton(
-                    backgroundGradient: LinearGradient(
+            child: GNav(
+              rippleColor: Colors.grey[300]!,
+              hoverColor: Colors.grey[100]!,
+              gap: 8,
+              activeColor: Colors.white,
+              iconSize: 24,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: const Duration(milliseconds: 400),
+              tabBackgroundColor: Colors.grey[100]!,
+              color: Colors.black,
+              tabs: const [
+                GButton(
+                  backgroundGradient: LinearGradient(
                       begin: Alignment.bottomLeft,
                       end: Alignment.topRight,
                       colors: [
                         Color.fromRGBO(248, 184, 225, 1.0),
                         Color.fromRGBO(69, 172, 243, 1.0)
-                      ]
-                    ),
+                      ]),
+                  icon: Icons.home,
+                  text: 'Home',
+                ),
+                GButton(
+                  backgroundGradient: LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      colors: [
+                        Color.fromRGBO(248, 184, 225, 1.0),
+                        Color.fromRGBO(69, 172, 243, 1.0)
+                      ]),
+                  icon: Icons.favorite_border,
+                  text: 'Likes',
+                ),
+                GButton(
+                  backgroundGradient: LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      colors: [
+                        Color.fromRGBO(248, 184, 225, 1.0),
+                        Color.fromRGBO(69, 172, 243, 1.0)
+                      ]),
+                  icon: Icons.shopping_cart_outlined,
+                  text: 'shop',
+                ),
+                GButton(
+                  backgroundGradient: LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      colors: [
+                        Color.fromRGBO(248, 184, 225, 1.0),
+                        Color.fromRGBO(69, 172, 243, 1.0)
+                      ]),
+                  icon: Icons.settings,
+                  text: 'Profile',
+                ),
+              ],
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) async {
+                setState(() {
+                  _selectedIndex = index;
+                });
 
-                    icon: Icons.home,
-                    text: 'Home',
-                  ),
-                  GButton(
-                    backgroundGradient: LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight,
-                        colors: [
-                          Color.fromRGBO(248, 184, 225, 1.0),
-                          Color.fromRGBO(69, 172, 243, 1.0)
-                        ]
-                    ),
-                    icon: Icons.favorite_border,
-                    text: 'Likes',
-                  ),
-                  GButton(
-                    backgroundGradient: LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight,
-                        colors: [
-                          Color.fromRGBO(248, 184, 225, 1.0),
-                          Color.fromRGBO(69, 172, 243, 1.0)
-                        ]
-                    ),
-                    icon: Icons.shopping_cart_outlined,
-                    text: 'shop',
-                  ),
-                  GButton(
-                    backgroundGradient: LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight,
-                        colors: [
-                          Color.fromRGBO(248, 184, 225, 1.0),
-                          Color.fromRGBO(69, 172, 243, 1.0)
-                        ]
-                    ),
-                    icon: Icons.settings,
-                    text: 'Profile',
-                  ),
-                ],
-                selectedIndex: _selectedIndex,
-                onTabChange: (index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                },
-              ),
+                // if (_selectedIndex == 2 || _selectedIndex ==3) {
+                //   initPage();
+                // }
+              },
+            ),
           ),
         ),
       ),
     );
   }
-}
 
+  bool isLogged = AuthService.isLoggedIn();
+
+  // Future<void> initPage() async {
+  //   await Future.delayed(Duration(microseconds: 1),);
+  //   isLogged = AuthService.isLoggedIn();
+  //   if (isLogged) {
+  //
+  //   } else {
+  //     setState(() {
+  //
+  //     _selectedIndex=0;
+  //     });
+  //     Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+  //   }
+  // }
+
+  @override
+  void initState() {
+    // initPage();
+    super.initState();
+  }
+}
