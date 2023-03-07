@@ -151,7 +151,8 @@ class HomePageState extends State<HomePage> {
               //   ),
               // ),
               Column(
-                children: category.map((e) => itemOfProduct(e)).toList(),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: categories.map((e) => itemOfCategory(e)).toList(),
               )
             ],
           ),
@@ -173,6 +174,7 @@ class HomePageState extends State<HomePage> {
   Widget itemOfCategory(Map category) {
     List<Product> list = category["products"];
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
@@ -204,7 +206,10 @@ class HomePageState extends State<HomePage> {
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(children: list.map((e) => itemOfProduct(e)).toList()),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: list.map((e) => itemOfProduct(e)).toList(),
+          ),
         ),
       ],
     );
@@ -226,6 +231,7 @@ class HomePageState extends State<HomePage> {
             color: Colors.white,
             boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 5)]),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
                 width: 180,
@@ -235,27 +241,27 @@ class HomePageState extends State<HomePage> {
                 ),
                 child: product.imgUrls!.isNotEmpty
                     ? CachedNetworkImage(
-                        imageUrl: product.imgUrls!.first,
-                        placeholder: (context, url) => Shimmer.fromColors(
-                          baseColor: Colors.red,
-                          highlightColor: Colors.yellow,
-                          child: const Center(
-                            child: Text(
-                              'Zara shop',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 40.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                  imageUrl: product.imgUrls!.first,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: Colors.red,
+                    highlightColor: Colors.yellow,
+                    child: const Center(
+                      child: Text(
+                        'Zara shop',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 40.0,
+                          fontWeight: FontWeight.bold,
                         ),
-                        fit: BoxFit.cover,
-                      )
+                      ),
+                    ),
+                  ),
+                  fit: BoxFit.cover,
+                )
                     : Image(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/images/rasm.png"),
-                      )),
+                  fit: BoxFit.cover,
+                  image: AssetImage("assets/images/rasm.png"),
+                )),
             Container(
               width: 180,
               padding: const EdgeInsets.all(10),
@@ -286,21 +292,40 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  List<Map<String, dynamic>> categories = [];
   Future<void> getProducts() async {
-    await DataService.getProduct().then((value) => {
-          print(value),
+    categories = [];
+    await RTDBService.getCategory().then((value) => {
+      setState(() {
+        category = value;
+        print(category);
+      })
+    });
+    for (var a in category) {
+      await DataService.getOfCategory(a).then((value) {
+        if (value.isNotEmpty) {
           setState(() {
-            items = value;
-          })
-        });
+            categories.add(
+                {
+                  "name": a,
+                  "products": value,
+                }
+            );
+          });
+        }
+      });
+    }
+
+    // await DataService.getProduct().then((value) => {
+    //       print(value),
+    //       setState(() {
+    //         items = value;
+    //       })
+    //     });
   }
 
  Future<void> getCategory(getProduct) async {
-    await RTDBService.getCategory().then((value) => {
-          setState(() {
-            category = value;
-          })
-        });
+
   }
 
 }

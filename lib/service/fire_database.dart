@@ -19,6 +19,20 @@ class DataService {
     return p;
   }
 
+
+
+  static Future<List<Product>> getOfCategory(String categoryName) async {
+    List<Product> p = [];
+    var docs = await _firestore.collection("Products").where("category", isEqualTo: categoryName).get();
+    for (var a in docs.docs) {
+      print(a.data()["name"]);
+      p.add(Product.fromJson(a.data()));
+    }
+    return p;
+  }
+
+
+
 }
 
 class RTDBService{
