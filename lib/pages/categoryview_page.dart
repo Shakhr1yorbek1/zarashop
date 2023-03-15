@@ -7,7 +7,7 @@ import 'package:zarashop/pages/productview_page.dart';
 import '../model/product_model.dart';
 
 class CategoryViewPage extends StatefulWidget {
-  final Map? category;
+  final Map<String, dynamic>? category;
   const CategoryViewPage({Key? key, this.category}) : super(key: key);
 
   @override

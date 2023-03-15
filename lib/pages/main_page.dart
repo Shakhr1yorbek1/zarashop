@@ -20,9 +20,9 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    (AuthService.isLoggedIn()) ? const LikesPage() : LoginScreen(),
-    (AuthService.isLoggedIn()) ? const marketPage() : LoginScreen(),
-    (AuthService.isLoggedIn()) ? const SettingPage() : LoginScreen(),
+    (AuthService.isLoggedIn()) ?  LikesPage() : LoginScreen(),
+    (AuthService.isLoggedIn()) ?  marketPage() : LoginScreen(),
+    (AuthService.isLoggedIn()) ?  SettingPage() : LoginScreen(),
   ];
 
   @override

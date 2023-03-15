@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 
 
@@ -47,6 +48,20 @@ class Utils {
             ],
           );
         }
+    );
+  }
+
+  static fToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey.shade400,
+      textColor: Colors.black,
+      fontSize: 16.0,
+
+
     );
   }
 

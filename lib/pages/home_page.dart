@@ -1,7 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zarashop/pages/productview_page.dart';
 import 'package:zarashop/pages/search_page.dart';
@@ -77,7 +81,7 @@ class HomePageState extends State<HomePage> {
                             builder: (context) => const SearchPage()));
                   },
                   child: CircleAvatar(
-                    backgroundColor: Colors.orange,
+                    backgroundColor: Colors.purpleAccent,
                     child: IconButton(
                       onPressed: () {},
                       icon: const Icon(Icons.add_a_photo_outlined),
@@ -88,9 +92,15 @@ class HomePageState extends State<HomePage> {
             ),
           )
         ],
+        flexibleSpace: Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [
+          Color.fromRGBO(248, 184, 225, 1.0),
+          Color.fromRGBO(69, 172, 243, 1.0)
+        ]))),
       ),
       body: RefreshIndicator(
-        onRefresh: () => getCategory(getCategory),
+        onRefresh: () => getProducts(),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -110,7 +120,6 @@ class HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-
               // Ads
               const SizedBox(
                 height: 10,
@@ -152,7 +161,8 @@ class HomePageState extends State<HomePage> {
               // ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: categories.map((e) => itemOfCategory(e)).toList(),
+                // children: categories.map((e) => itemOfCategory(e)).toList(),
+                children: itemOfCategory,
               )
             ],
           ),
@@ -161,17 +171,19 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  dynamic usersQuery = FirebaseFirestore.instance.collection('products');
+
+
   @override
   void initState() {
     getProducts();
-    getCategory(getCategory);
     super.initState();
   }
 
   List items = [];
-  List category = [];
+  List categoryNames = [];
 
-  Widget itemOfCategory(Map category) {
+  /*Widget itemOfCategory111111(Map<String, dynamic> category) {
     List<Product> list = category["products"];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,24 +216,39 @@ class HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        SingleChildScrollView(
+        Container(
+          height: 300,
+          width: 400,
+          child: FirestoreListView<Product>(
+            query: usersQuery,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, snapshot) {
+              Product product = snapshot.data();
+              return itemOfProduct(product);
+            },
+          ),
+        )
+
+        *//*SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: list.map((e) => itemOfProduct(e)).toList(),
           ),
-        ),
+        ),*//*
       ],
     );
-  }
+  }*/
 
   Widget itemOfProduct(Product product) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
             context,
-            CupertinoPageRoute(
-                builder: (context) => ProductViewPage(product: product)));
+            PageTransition(
+              child: ProductViewPage(product: product),
+              type: PageTransitionType.fade,
+            ));
       },
       child: Container(
         clipBehavior: Clip.hardEdge,
@@ -241,27 +268,31 @@ class HomePageState extends State<HomePage> {
                 ),
                 child: product.imgUrls!.isNotEmpty
                     ? CachedNetworkImage(
-                  imageUrl: product.imgUrls!.first,
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: Colors.red,
-                    highlightColor: Colors.yellow,
-                    child: const Center(
-                      child: Text(
-                        'Zara shop',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 40.0,
-                          fontWeight: FontWeight.bold,
+                        imageUrl: product.imgUrls!.first,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.red,
+                          highlightColor: Colors.yellow,
+                          child: const Center(
+                            child: Text(
+                              'Zara shop',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 40.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  fit: BoxFit.cover,
-                )
-                    : Image(
-                  fit: BoxFit.cover,
-                  image: AssetImage("assets/images/rasm.png"),
-                )),
+                        errorWidget: (context, url, error) => Image(
+                          fit: BoxFit.cover,
+                          image: AssetImage("assets/images/rasm.png"),
+                        ),
+                        fit: BoxFit.cover,
+                      )
+                    : const Image(
+                        fit: BoxFit.cover,
+                        image: AssetImage("assets/images/rasm.png"),
+                      )),
             Container(
               width: 180,
               padding: const EdgeInsets.all(10),
@@ -293,39 +324,86 @@ class HomePageState extends State<HomePage> {
   }
 
   List<Map<String, dynamic>> categories = [];
+
+  List<Widget> itemOfCategory = [];
   Future<void> getProducts() async {
-    categories = [];
+    setState(() {
+      categories = [];
+      itemOfCategory = [];
+    });
     await RTDBService.getCategory().then((value) => {
       setState(() {
-        category = value;
-        print(category);
-      })
+        categoryNames = value;
+      }),
     });
-    for (var a in category) {
-      await DataService.getOfCategory(a).then((value) {
+    for (int i = 0; i < categoryNames.length; i++) {
+      await DataService.getOfCategory(categoryNames[i]).then((value) {
         if (value.isNotEmpty) {
           setState(() {
-            categories.add(
-                {
-                  "name": a,
-                  "products": value,
-                }
-            );
+            categories.add({
+              "name": categoryNames[i],
+              "products": value,
+            });
           });
         }
       });
+      setState(() {
+        final usersQuery = FirebaseFirestore.instance.collection('products').where("category", isEqualTo: categories[i]["name"]).
+        withConverter<Product>(
+          fromFirestore: (snapshot, _) => Product.fromJson(snapshot.data()!),
+          toFirestore: (product, _) => product.toJson(),
+        );
+        itemOfCategory.add(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(right: 10, left: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        categories[i]["name"],
+                        style:
+                        const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => CategoryViewPage(
+                                category: categories[i],
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Yana",
+                          style: TextStyle(color: Colors.orange, fontSize: 15),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 300,
+                  width: 400,
+                  child: FirestoreListView<Product>(
+                    query: usersQuery,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, snapshot) {
+                      Product product = snapshot.data();
+                      return itemOfProduct(product);
+                    },
+                  ),
+                ),
+              ],
+            ),
+        );
+      });
     }
 
-    // await DataService.getProduct().then((value) => {
-    //       print(value),
-    //       setState(() {
-    //         items = value;
-    //       })
-    //     });
   }
-
- Future<void> getCategory(getProduct) async {
-
-  }
-
 }

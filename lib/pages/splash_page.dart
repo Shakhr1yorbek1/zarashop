@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../register_page/phone.dart';
-import '../service/auth_service.dart';
 import 'main_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -36,8 +34,8 @@ class _SplashPageState extends State<SplashPage> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color.fromRGBO(193, 53, 132, 1),
-                Color.fromRGBO(131, 58, 180, 1),
+                Color.fromRGBO(248, 184, 225, 1.0),
+                Color.fromRGBO(69, 172, 243, 1.0)
               ]),
         ),
         child: Column(
@@ -51,7 +49,7 @@ class _SplashPageState extends State<SplashPage> {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(32),
-                child: Image(
+                child: const Image(
                   image: AssetImage("assets/images/rasm.png"),
                 ),
               ),

@@ -6,7 +6,7 @@ import '../model/product_model.dart';
 
 class ProductViewPage extends StatefulWidget {
   final Product? product;
-  const ProductViewPage({Key? key, required this.product}) : super(key: key);
+  const ProductViewPage({Key? key, this.product}) : super(key: key);
 
   @override
   State<ProductViewPage> createState() => _ProductViewPageState();
@@ -69,6 +69,9 @@ class _ProductViewPageState extends State<ProductViewPage> {
                         placeholder: (context, url) => const Center(
                           child: CircularProgressIndicator(),
                         ),
+                        errorWidget: (context, url, error) {
+                          return Icon(Icons.warning,color: Colors.red,size: 160,);
+                        },
                       );
                     },
                   ),

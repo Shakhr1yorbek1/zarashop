@@ -1,8 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// ignore_for_file: library_private_types_in_public_api
 
+import 'dart:ui';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';import 'package:fluttertoast/fluttertoast.dart';
+
+import '../model/Utils.dart';
+import '../model/user_model.dart';
 import '../pages/main_page.dart';
+import '../service/data_service.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,6 +18,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
+  TextEditingController Namecontroller = TextEditingController();
+  TextEditingController Lastnamecontroller = TextEditingController();
+  TextEditingController Gmailcontroller = TextEditingController();
 
   FirebaseAuth auth = FirebaseAuth.instance;
   bool otpVisibility = false;
@@ -28,85 +37,158 @@ class _LoginScreenState extends State<LoginScreen> {
         Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text("Ro'yxatdan o'tish"),
-          ),
-          body: Container(
-            margin: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: phoneController,
-                  decoration: const InputDecoration(
-                    hintText: 'Phone Number',
-                    prefix: Padding(
-                      padding: EdgeInsets.all(4),
-                      child: Text('+998'),
-                    ),
-                  ),
-                  maxLength: 10,
-                  keyboardType: TextInputType.phone,
-                ),
-                Visibility(
-                  visible: otpVisibility,
-                  child: TextField(
-                    controller: otpController,
+            title: const Text("Ro'yxatdan o'tish"),
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromRGBO(248, 184, 225, 1.0),
+                    Color.fromRGBO(69, 172, 243, 1.0)
+                    ]
+                  )
+                )
+              ),
+
+            ),
+          body: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  //#fullName
+                  TextField(
+                    controller: Namecontroller,
                     decoration: const InputDecoration(
-                      hintText: 'OTP',
+                      hintText: 'Name',
                       prefix: Padding(
                         padding: EdgeInsets.all(4),
-                        child: Text(''),
                       ),
                     ),
-                    maxLength: 6,
-                    keyboardType: TextInputType.number,
+                    maxLength: 20,
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MaterialButton(
-                  color: Colors.indigo[900],
-                  onPressed: () {
-                    if (otpVisibility) {
-                      verifyOTP();
-                    } else {
-                      loginWithPhone();
-                    }
-                  },
-                  child: Text(
-                    otpVisibility ? "Verify" : "Login",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
+                  //#email
+                  TextField(
+                    controller: Lastnamecontroller,
+                    decoration: const InputDecoration(
+                      hintText: 'Last Name',
+                      prefix: Padding(
+                        padding: EdgeInsets.all(4),
+
+                      ),
+                    ),
+                    maxLength: 20,
+                  ),
+                  //#password
+                  TextField(
+                    controller:Gmailcontroller,
+                    decoration: const InputDecoration(
+                      hintText: 'Gmail (Optional)',
+                      prefix: Padding(
+                        padding: EdgeInsets.all(4),
+                      ),
+                    ),
+                    maxLength: 20,
+                  ),
+
+
+                  TextField(
+                    controller: phoneController,
+                    decoration: const InputDecoration(
+                      hintText: 'Phone Number',
+                      prefix: Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Text('+998'),
+                      ),
+                    ),
+                    keyboardType: TextInputType.phone,
+                    maxLength: 10,
+                  ),
+                  Visibility(
+                    visible: otpVisibility,
+                    child: TextField(
+                      controller: otpController,
+                      decoration: const InputDecoration(
+                        hintText: 'OTP',
+                        prefix: Padding(
+                          padding: EdgeInsets.all(4),
+                          child: Text(''),
+                        ),
+                      ),
+                      maxLength: 6,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  MaterialButton(
+                    color: Colors.purple,
+                    onPressed: () {
+                      if (otpVisibility) {
+                        addProfile();
+                        verifyOTP();
+                        register(user!.uid);
+                      } else {
+                        loginWithPhone();
+                      }
+                    },
+                    child: Text(
+                      "Login",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          )
         ),
         (isLoading)
             ? Scaffold(
                 backgroundColor: Colors.grey.withOpacity(.3),
                 body: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                  child:  CircularProgressIndicator(),
+                )
+
               )
-            : SizedBox(),
+            : const SizedBox(),
       ],
     );
   }
 
+  void addProfile()async {
+    String name = Namecontroller.text;
+    String LastName = Lastnamecontroller.text;
+    String Gmaill = Gmailcontroller.text;
+
+    if (name.isEmpty || LastName.isEmpty  || phoneController.text.isEmpty) {
+      Utils.fToast("Ma'lumotlar to'liq emas");
+      return;
+    }
+  }
+
   void loginWithPhone() async {
+    String name = Namecontroller.text;
+    String LastName = Lastnamecontroller.text;
+    String Gmaill = Gmailcontroller.text;
+
+    if (name.isEmpty || LastName.isEmpty  || phoneController.text.isEmpty) {
+      Utils.fToast("Ma'lumotlar to'liq emas");
+      return;
+    }
+
     setState(() {
       isLoading = true;
     });
+
     auth.verifyPhoneNumber(
       phoneNumber: "+998" + phoneController.text,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential).then((value) {
-          print("You are logged in successfully");
+          print("Muoffaqiyatli ro'yxatdan o'tildi");
         });
       },
       verificationFailed: (FirebaseAuthException e) {
@@ -119,7 +201,9 @@ class _LoginScreenState extends State<LoginScreen> {
           isLoading = false;
         });
       },
-      codeAutoRetrievalTimeout: (String verificationId) {},
+      codeAutoRetrievalTimeout: (String verificationId) {
+
+      },
     );
   }
 
@@ -172,4 +256,14 @@ class _LoginScreenState extends State<LoginScreen> {
   void LogOut() async {
     await _auth.signOut();
   }
+
+  void register(String uid) async {
+    String name=Namecontroller.text.trim();
+    String lastname=Lastnamecontroller.text.trim();
+    String gmail=Gmailcontroller.text.trim();
+    Users users=Users(Name: name,LastName: lastname,);
+    users.uid=uid;
+    await DataService.storeUser(users);
+  }
+
 }
