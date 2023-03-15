@@ -19,9 +19,9 @@ class _MyVerifyState extends State<MyVerify> {
   User? user;
   String verificationID = "";
   bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
-
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
@@ -99,7 +99,6 @@ class _MyVerifyState extends State<MyVerify> {
                 focusedPinTheme: focusedPinTheme,
                 submittedPinTheme: submittedPinTheme,
                 controller: otpController,
-
                 showCursor: true,
                 onCompleted: (pin) => print(pin),
               ),
@@ -141,6 +140,7 @@ class _MyVerifyState extends State<MyVerify> {
       ),
     );
   }
+
   void verifyOTP() async {
     setState(() {
       isLoading = false;
@@ -149,14 +149,14 @@ class _MyVerifyState extends State<MyVerify> {
         verificationId: verificationID, smsCode: otpController.text);
 
     await auth.signInWithCredential(credential).then(
-          (value) {
+      (value) {
         setState(() {
           user = FirebaseAuth.instance.currentUser;
         });
       },
     ).whenComplete(
-          () {
-        if (user!= null) {
+      () {
+        if (user != null) {
           Fluttertoast.showToast(
             msg: "You are logged in successfully",
             toastLength: Toast.LENGTH_SHORT,
@@ -186,5 +186,4 @@ class _MyVerifyState extends State<MyVerify> {
       },
     );
   }
-
 }

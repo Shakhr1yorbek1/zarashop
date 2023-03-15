@@ -14,14 +14,10 @@ class _marketPageState extends State<marketPage> {
       appBar: AppBar(
         flexibleSpace: Container(
             decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [
-                      Color.fromRGBO(248, 184, 225, 1.0),
-                      Color.fromRGBO(69, 172, 243, 1.0)
-                    ]
-                )
-            )
-        ),
+                gradient: LinearGradient(colors: [
+          Color.fromRGBO(248, 184, 225, 1.0),
+          Color.fromRGBO(69, 172, 243, 1.0)
+        ]))),
       ),
     );
   }

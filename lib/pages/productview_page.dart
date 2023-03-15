@@ -6,6 +6,7 @@ import '../model/product_model.dart';
 
 class ProductViewPage extends StatefulWidget {
   final Product? product;
+
   const ProductViewPage({Key? key, this.product}) : super(key: key);
 
   @override
@@ -16,40 +17,12 @@ class _ProductViewPageState extends State<ProductViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          iconTheme: const IconThemeData(color: Colors.deepOrange),
-          title: Container(
-            width: 300,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.black26,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              child: Row(
-                children: const [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Icon(
-                    Icons.search,
-                    color: Colors.deepOrange,
-                  ),
-                  Text(
-                    "Search",
-                    style: TextStyle(color: Colors.orange, fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
         body: Stack(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Stack(
               children: [
                 Container(
                   width: double.infinity,
@@ -70,70 +43,109 @@ class _ProductViewPageState extends State<ProductViewPage> {
                           child: CircularProgressIndicator(),
                         ),
                         errorWidget: (context, url, error) {
-                          return Icon(Icons.warning,color: Colors.red,size: 160,);
+                          return Icon(
+                            Icons.warning,
+                            color: Colors.red,
+                            size: 160,
+                          );
                         },
                       );
                     },
                   ),
                 ),
-                //description
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.grey.shade300,
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.arrow_back_ios_sharp)),
+                    )
+                  ],
+                )
+              ],
+            ),
+            //description
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.product!.name!,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 24),
+                  ),
+                  //price
+                  Text(
+                    widget.product!.price!,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.deepOrange),
+                  ),
+                  //star
+                  Row(
                     children: [
-                      Text(
-                        widget.product!.name!,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24),
+                      Image(
+                        image: AssetImage("assets/images/star.jpg"),
+                        width: 150,
                       ),
-                      //price
                       Text(
-                        widget.product!.price!,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                            color: Colors.deepOrange),
+                        "4.9",
+                        style: TextStyle(fontSize: 30),
                       ),
-                      //descriptions
+                    ],
+                  ),
+                  //descriptions
+                  Text(
+                    "Description",
+                    style: TextStyle(
+                      fontSize: (30),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    widget.product!.content!,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  margin: EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.shopping_cart_outlined,
+                          size: 40,
+                        ),
+                      ),
                       Text(
-                        widget.product!.content!,
-                        style: const TextStyle(fontSize: 24),
-                      )
+                        "Buy",
+                        style: TextStyle(fontSize: 30),
+                      ),
                     ],
                   ),
                 ),
               ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.all(15),
-                      child: Column(
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.shopping_cart_outlined,
-                              size: 40,
-                            ),
-                          ),
-                          Text(
-                            "Buy",
-                            style: TextStyle(fontSize: 30),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-              ],
             )
           ],
-        ));
+        )
+      ],
+    ));
   }
 }

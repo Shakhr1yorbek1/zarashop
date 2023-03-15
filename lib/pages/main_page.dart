@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:zarashop/pages/settings_page.dart';
-import '../register_page/phone.dart';
+import '../registerpage/phone.dart';
 import '../service/auth_service.dart';
 import 'home_page.dart';
 import 'likes_page.dart';
@@ -20,9 +20,9 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    (AuthService.isLoggedIn()) ?  LikesPage() : LoginScreen(),
-    (AuthService.isLoggedIn()) ?  marketPage() : LoginScreen(),
-    (AuthService.isLoggedIn()) ?  SettingPage() : LoginScreen(),
+    (AuthService.isLoggedIn()) ? LikesPage() : LoginScreen(),
+    (AuthService.isLoggedIn()) ? marketPage() : LoginScreen(),
+    (AuthService.isLoggedIn()) ? SettingPage() : LoginScreen(),
   ];
 
   @override

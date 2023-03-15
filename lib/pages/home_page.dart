@@ -173,7 +173,6 @@ class HomePageState extends State<HomePage> {
 
   dynamic usersQuery = FirebaseFirestore.instance.collection('products');
 
-
   @override
   void initState() {
     getProducts();
@@ -229,13 +228,13 @@ class HomePageState extends State<HomePage> {
           ),
         )
 
-        *//*SingleChildScrollView(
+        */ /*SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: list.map((e) => itemOfProduct(e)).toList(),
           ),
-        ),*//*
+        ),*/ /*
       ],
     );
   }*/
@@ -326,16 +325,17 @@ class HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> categories = [];
 
   List<Widget> itemOfCategory = [];
+
   Future<void> getProducts() async {
     setState(() {
       categories = [];
       itemOfCategory = [];
     });
     await RTDBService.getCategory().then((value) => {
-      setState(() {
-        categoryNames = value;
-      }),
-    });
+          setState(() {
+            categoryNames = value;
+          }),
+        });
     for (int i = 0; i < categoryNames.length; i++) {
       await DataService.getOfCategory(categoryNames[i]).then((value) {
         if (value.isNotEmpty) {
@@ -348,62 +348,64 @@ class HomePageState extends State<HomePage> {
         }
       });
       setState(() {
-        final usersQuery = FirebaseFirestore.instance.collection('products').where("category", isEqualTo: categories[i]["name"]).
-        withConverter<Product>(
-          fromFirestore: (snapshot, _) => Product.fromJson(snapshot.data()!),
-          toFirestore: (product, _) => product.toJson(),
-        );
+        final usersQuery = FirebaseFirestore.instance
+            .collection('products')
+            .where("category", isEqualTo: categories[i]["name"])
+            .withConverter<Product>(
+              fromFirestore: (snapshot, _) =>
+                  Product.fromJson(snapshot.data()!),
+              toFirestore: (product, _) => product.toJson(),
+            );
         itemOfCategory.add(
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(right: 10, left: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        categories[i]["name"],
-                        style:
-                        const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => CategoryViewPage(
-                                category: categories[i],
-                              ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(right: 10, left: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      categories[i]["name"],
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.w800),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => CategoryViewPage(
+                              category: categories[i],
                             ),
-                          );
-                        },
-                        child: const Text(
-                          "Yana",
-                          style: TextStyle(color: Colors.orange, fontSize: 15),
-                        ),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Yana",
+                        style: TextStyle(color: Colors.orange, fontSize: 15),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Container(
-                  height: 300,
-                  width: 400,
-                  child: FirestoreListView<Product>(
-                    query: usersQuery,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, snapshot) {
-                      Product product = snapshot.data();
-                      return itemOfProduct(product);
-                    },
-                  ),
+              ),
+              Container(
+                height: 300,
+                width: 400,
+                child: FirestoreListView<Product>(
+                  query: usersQuery,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, snapshot) {
+                    Product product = snapshot.data();
+                    return itemOfProduct(product);
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
         );
       });
     }
-
   }
 }

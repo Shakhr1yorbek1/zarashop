@@ -8,6 +8,7 @@ import '../model/product_model.dart';
 
 class CategoryViewPage extends StatefulWidget {
   final Map<String, dynamic>? category;
+
   const CategoryViewPage({Key? key, this.category}) : super(key: key);
 
   @override
@@ -16,6 +17,7 @@ class CategoryViewPage extends StatefulWidget {
 
 class _CategoryViewPageState extends State<CategoryViewPage> {
   List<Product> items = [];
+
   void parseData() {
     setState(() {
       items = widget.category!["products"];
