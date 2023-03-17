@@ -6,12 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../model/Utils.dart';
+import '../service/Utils.dart';
 import '../model/user_model.dart';
 import '../pages/main_page.dart';
 import '../service/data_service.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -53,43 +55,43 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     //image
-                    Image(
+                    const Image(
                       image: AssetImage("assets/images/rasm.png"),
                     ),
 
                     //#fullName
-                    TextField(
-                      controller: Namecontroller,
-                      decoration: const InputDecoration(
-                        hintText: 'Name',
-                        prefix: Padding(
-                          padding: EdgeInsets.all(4),
-                        ),
-                      ),
-                      maxLength: 20,
-                    ),
+                    // TextField(
+                    //   controller: Namecontroller,
+                    //   decoration: const InputDecoration(
+                    //     hintText: 'Name',
+                    //     prefix: Padding(
+                    //       padding: EdgeInsets.all(4),
+                    //     ),
+                    //   ),
+                    //   maxLength: 20,
+                    // ),
                     //#email
-                    TextField(
-                      controller: Lastnamecontroller,
-                      decoration: const InputDecoration(
-                        hintText: 'Last Name',
-                        prefix: Padding(
-                          padding: EdgeInsets.all(4),
-                        ),
-                      ),
-                      maxLength: 20,
-                    ),
+                    // TextField(
+                    //   controller: Lastnamecontroller,
+                    //   decoration: const InputDecoration(
+                    //     hintText: 'Last Name',
+                    //     prefix: Padding(
+                    //       padding: EdgeInsets.all(4),
+                    //     ),
+                    //   ),
+                    //   maxLength: 20,
+                    // ),
                     //#password
-                    TextField(
-                      controller: Gmailcontroller,
-                      decoration: const InputDecoration(
-                        hintText: 'Gmail (Optional)',
-                        prefix: Padding(
-                          padding: EdgeInsets.all(4),
-                        ),
-                      ),
-                      maxLength: 20,
-                    ),
+                    // TextField(
+                    //   controller: Gmailcontroller,
+                    //   decoration: const InputDecoration(
+                    //     hintText: 'Gmail (Optional)',
+                    //     prefix: Padding(
+                    //       padding: EdgeInsets.all(4),
+                    //     ),
+                    //   ),
+                    //   maxLength: 20,
+                    // ),
 
                     TextField(
                       controller: phoneController,
@@ -122,18 +124,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     MaterialButton(
                       color: Colors.purple,
-                      onPressed: () {
+                      onPressed: () async {
                         if (otpVisibility) {
-                          addProfile();
-                          verifyOTP();
-                          register(user!.uid);
+                          await verifyOTP();
+                          // await register(user!.uid);
                         } else {
                           loginWithPhone();
                         }
                       },
-                      child: Text(
+                      child: const Text(
                         "Login",
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                         ),
@@ -146,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
         (isLoading)
             ? Scaffold(
                 backgroundColor: Colors.grey.withOpacity(.3),
-                body: Center(
+                body: const Center(
                   child: CircularProgressIndicator(),
                 ))
             : const SizedBox(),
@@ -200,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void verifyOTP() async {
+  Future<void> verifyOTP() async {
     setState(() {
       isLoading = false;
     });
@@ -214,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       },
     ).whenComplete(
-      () {
+      () async {
         if (user != null) {
           Fluttertoast.showToast(
             msg: "You are logged in successfully",
@@ -225,10 +226,11 @@ class _LoginScreenState extends State<LoginScreen> {
             textColor: Colors.white,
             fontSize: 16.0,
           );
+          bool exist = await DataService.existUser(user!.uid);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const MainPage(),
+              builder: (context) => MainPage(dataSaved: exist),
             ),
           );
         } else {
@@ -250,17 +252,22 @@ class _LoginScreenState extends State<LoginScreen> {
     await _auth.signOut();
   }
 
-  void register(String uid) async {
+  Future<void> register(String uid) async {
     String phoneN = phoneController.text.trim();
     String name = Namecontroller.text.trim();
     String lastname = Lastnamecontroller.text.trim();
     String gmail = Gmailcontroller.text.trim();
+
+
+
     Users users = Users(
-      Phone: phoneN,
-      Name: name,
-      LastName: lastname,
+      phone: phoneN,
+      name: name,
+      lastName: lastname,
     );
     users.uid = uid;
+    print(users.uid);
     await DataService.storeUser(users);
+
   }
 }

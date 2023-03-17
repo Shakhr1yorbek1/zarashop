@@ -75,6 +75,7 @@ class _CategoryViewPageState extends State<CategoryViewPage> {
                 ),
                 child: CachedNetworkImage(
                   imageUrl: product.imgUrls!.first,
+                  fit: BoxFit.cover,
                   placeholder: (context, url) => Shimmer.fromColors(
                     baseColor: Colors.red,
                     highlightColor: Colors.yellow,

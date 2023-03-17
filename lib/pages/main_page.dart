@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:zarashop/pages/settings_page.dart';
+import 'package:zarashop/service/data_service.dart';
+import '../model/user_model.dart';
 import '../registerpage/phone.dart';
 import '../service/auth_service.dart';
 import 'home_page.dart';
@@ -10,17 +12,20 @@ import 'likes_page.dart';
 import 'market_page.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final bool? dataSaved;
+  const MainPage({super.key, this.dataSaved});
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
+  bool isLogged = false;
   int _selectedIndex = 0;
+
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    (AuthService.isLoggedIn()) ? LikesPage() : LoginScreen(),
+    (AuthService.isLoggedIn()) ? LikesPage():LoginScreen()  ,
     (AuthService.isLoggedIn()) ? marketPage() : LoginScreen(),
     (AuthService.isLoggedIn()) ? SettingPage() : LoginScreen(),
   ];
@@ -118,25 +123,25 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  bool isLogged = AuthService.isLoggedIn();
 
-  // Future<void> initPage() async {
-  //   await Future.delayed(Duration(microseconds: 1),);
-  //   isLogged = AuthService.isLoggedIn();
-  //   if (isLogged) {
-  //
-  //   } else {
-  //     setState(() {
-  //
-  //     _selectedIndex=0;
-  //     });
-  //     Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-  //   }
-  // }
+  Future<void> initPage() async {
+    await Future.delayed(Duration(microseconds: 1),);
+    isLogged = AuthService.isLoggedIn();
+    if(isLogged) {
+    } else {
+      setState(() {
+      _selectedIndex=0;
+      });
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    }
+  }
 
   @override
   void initState() {
     // initPage();
+    setState(() {
+      isLogged = AuthService.isLoggedIn();
+    });
     super.initState();
   }
 }

@@ -22,6 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,7 +163,17 @@ class HomePageState extends State<HomePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // children: categories.map((e) => itemOfCategory(e)).toList(),
-                children: itemOfCategory,
+                children: [
+                  Column(
+                    children: itemOfCategory,
+                  ),
+                  (isLoading) ?
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(20),
+                    child: const CircularProgressIndicator(),
+                  ) : const SizedBox(),
+                ],
               )
             ],
           ),
@@ -171,73 +182,17 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  dynamic usersQuery = FirebaseFirestore.instance.collection('products');
+  List items = [];
+  List categoryNames = [];
+  bool isLoading = false;
+  List<Map<String, dynamic>> categories = [];
+  List<Widget> itemOfCategory = [];
 
   @override
   void initState() {
     getProducts();
     super.initState();
   }
-
-  List items = [];
-  List categoryNames = [];
-
-  /*Widget itemOfCategory111111(Map<String, dynamic> category) {
-    List<Product> list = category["products"];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.only(right: 10, left: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                category["name"],
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) => CategoryViewPage(
-                                category: category,
-                              )));
-                },
-                child: const Text(
-                  "Yana",
-                  style: TextStyle(color: Colors.orange, fontSize: 15),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: 300,
-          width: 400,
-          child: FirestoreListView<Product>(
-            query: usersQuery,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, snapshot) {
-              Product product = snapshot.data();
-              return itemOfProduct(product);
-            },
-          ),
-        )
-
-        */ /*SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: list.map((e) => itemOfProduct(e)).toList(),
-          ),
-        ),*/ /*
-      ],
-    );
-  }*/
 
   Widget itemOfProduct(Product product) {
     return GestureDetector(
@@ -322,20 +277,18 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  List<Map<String, dynamic>> categories = [];
-
-  List<Widget> itemOfCategory = [];
 
   Future<void> getProducts() async {
     setState(() {
+      isLoading = true;
       categories = [];
       itemOfCategory = [];
     });
     await RTDBService.getCategory().then((value) => {
-          setState(() {
-            categoryNames = value;
-          }),
-        });
+      setState(() {
+        categoryNames = value;
+      }),
+    });
     for (int i = 0; i < categoryNames.length; i++) {
       await DataService.getOfCategory(categoryNames[i]).then((value) {
         if (value.isNotEmpty) {
@@ -396,6 +349,11 @@ class HomePageState extends State<HomePage> {
                 child: FirestoreListView<Product>(
                   query: usersQuery,
                   scrollDirection: Axis.horizontal,
+                  loadingBuilder: (context) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
                   itemBuilder: (context, snapshot) {
                     Product product = snapshot.data();
                     return itemOfProduct(product);
@@ -407,5 +365,8 @@ class HomePageState extends State<HomePage> {
         );
       });
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 }

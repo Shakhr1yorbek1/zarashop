@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:zarashop/pages/main_page.dart';
 
 import '../model/product_model.dart';
 
@@ -14,6 +16,8 @@ class ProductViewPage extends StatefulWidget {
 }
 
 class _ProductViewPageState extends State<ProductViewPage> {
+
+  bool isLiked = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,11 +43,12 @@ class _ProductViewPageState extends State<ProductViewPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return CachedNetworkImage(
                         imageUrl: widget.product!.imgUrls![index],
+                        fit: BoxFit.cover,
                         placeholder: (context, url) => const Center(
                           child: CircularProgressIndicator(),
                         ),
                         errorWidget: (context, url, error) {
-                          return Icon(
+                          return const Icon(
                             Icons.warning,
                             color: Colors.red,
                             size: 160,
@@ -53,16 +58,61 @@ class _ProductViewPageState extends State<ProductViewPage> {
                     },
                   ),
                 ),
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.grey.shade300,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.arrow_back_ios_sharp)),
-                    )
-                  ],
-                )
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   Row(
+                     children: [
+                       Column(
+                         children: [
+                           const SizedBox(height: 50,),
+                         Row(
+                           children: [
+                             SizedBox(width: 20,),
+                             CircleAvatar(
+                               backgroundColor: Colors.grey.shade200,
+                               child: IconButton(
+                                   onPressed: () {
+                                     Navigator.pop(context);
+                                   },
+                                   icon: const Icon(Icons.arrow_back_ios_sharp,color: Colors.black54,)),
+                             ),
+                           ],
+                         )
+                         ],
+                       )
+                     ],
+                   ),
+                   Row(
+                     children: [
+                       Column(
+                         children: [
+                           const SizedBox(height: 50,),
+                           Row(
+                             children: [
+                               CircleAvatar(
+                                 backgroundColor: Colors.grey.shade200,
+                                 child:    IconButton(
+                                   onPressed: (){
+                                     // setState((){
+                                     //   post.isLiked = !post.isLiked;
+                                     // });
+                                     // DataService.likePost(post, post.isLiked);
+                                   },
+                                   icon: (isLiked==true) ?
+                                   const Icon(Icons.favorite_border, color: Colors.red,) :
+                                   const Icon(Icons.favorite, color: Colors.red,) ,
+                                 ),
+                               ),
+                               SizedBox(width: 20,),
+                             ],
+                           )
+                         ],
+                       )
+                     ],
+                   ),
+                 ],
+               )
               ],
             ),
             //description
@@ -86,26 +136,26 @@ class _ProductViewPageState extends State<ProductViewPage> {
                   ),
                   //star
                   Row(
-                    children: [
-                      Image(
+                    children:const [
+                       Image(
                         image: AssetImage("assets/images/star.jpg"),
                         width: 150,
                       ),
-                      Text(
+                       Text(
                         "4.9",
                         style: TextStyle(fontSize: 30),
                       ),
                     ],
                   ),
                   //descriptions
-                  Text(
+                  const Text(
                     "Description",
                     style: TextStyle(
                       fontSize: (30),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Text(
@@ -124,17 +174,17 @@ class _ProductViewPageState extends State<ProductViewPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  margin: EdgeInsets.all(15),
+                  margin: const EdgeInsets.all(15),
                   child: Column(
                     children: [
                       IconButton(
                         onPressed: () {},
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.shopping_cart_outlined,
                           size: 40,
                         ),
                       ),
-                      Text(
+                      const Text(
                         "Buy",
                         style: TextStyle(fontSize: 30),
                       ),

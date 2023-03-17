@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import '../model/Utils.dart';
+import 'package:zarashop/model/user_model.dart';
+import '../model/user_model.dart';
+import '../model/user_model.dart';
+import '../service/Utils.dart';
 import '../registerpage/phone.dart';
 import '../service/auth_service.dart';
+import '../service/data_service.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -11,9 +15,18 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  String Name = "";
-  String LastName = "";
-  String Gmail = "";
+
+  Users? users;
+  String name = "";
+
+  void loadMember() async {
+    await DataService.loadMember().then((value) {
+      setState(() {
+        users = value;
+        name = users!.name!;
+      });
+    });
+  }
 
   void doSignOut() {
     print(1);
@@ -23,6 +36,12 @@ class _SettingPageState extends State<SettingPage> {
               context, MaterialPageRoute(builder: (context) => LoginScreen())),
           print(3),
         });
+  }
+
+  @override
+  void initState() {
+    loadMember();
+    super.initState();
   }
 
   @override
@@ -57,7 +76,7 @@ class _SettingPageState extends State<SettingPage> {
                 color: Colors.black, fontFamily: "billabong", fontSize: 28)),
       ),
       body: Center(
-        child: Text(Name),
+        child: Text(name),
       ),
     );
   }

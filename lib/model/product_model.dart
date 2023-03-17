@@ -1,4 +1,5 @@
 class Product {
+  String? uid;
   String? content;
   List? imgUrls;
   String? id;
@@ -9,6 +10,7 @@ class Product {
   bool? isAvailable;
   int? buyCount;
   String? date;
+  bool isLiked = false;
 
   Product(
       {this.date,
@@ -23,6 +25,7 @@ class Product {
       this.productOwner});
 
   Product.fromJson(Map<String, dynamic> json) {
+    uid = json['uid'];
     date = json['date'];
     content = json['content'];
     imgUrls = json['imgUrls'];
@@ -36,6 +39,7 @@ class Product {
   }
 
   Map<String, dynamic> toJson() => {
+        "uid": uid,
         "content": content,
         "date": date,
         "imgUrls": imgUrls,

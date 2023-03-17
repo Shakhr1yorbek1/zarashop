@@ -1,25 +1,25 @@
 class Users {
-  String? Phone;
-  String? Name;
-  String? LastName;
-  String? Gmail;
+  String? phone;
+  String? name;
+  String? lastName = "";
+  String? gmail = "";
   String? uid;
 
-  Users({this.Name, this.LastName, this.Phone});
+  Users({this.name, this.lastName, this.phone});
 
   Users.fromJson(Map<String, dynamic> json) {
-    Phone = json['Phone'];
-    Name = json['Name'];
-    LastName = json['LastName'];
-    Gmail = json['Gmail'];
+    phone = json['Phone'];
+    name = json['Name'];
+    lastName = json['LastName'];
+    gmail = json['Gmail'];
     uid = json['uid'];
   }
 
   Map<String, dynamic> toJson() => {
-        "Phone": Phone,
-        "Name": Name,
-        "LastName": LastName,
-        "Gmail": Gmail,
+        "Phone": phone,
+        "Name": name,
+        "LastName": lastName,
+        "Gmail": gmail,
         "uid": uid,
       };
 }
