@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart' hide Query;
 import 'package:firebase_database/firebase_database.dart';
+
 import '../model/product_model.dart';
-import 'auth_service.dart';
 
 class DataService {
   static final _firestore = FirebaseFirestore.instance;

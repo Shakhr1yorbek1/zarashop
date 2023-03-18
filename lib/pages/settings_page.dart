@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zarashop/model/user_model.dart';
-import '../model/user_model.dart';
-import '../model/user_model.dart';
-import '../service/Utils.dart';
+
 import '../registerpage/phone.dart';
+import '../service/Utils.dart';
 import '../service/auth_service.dart';
 import '../service/data_service.dart';
 
@@ -15,7 +14,6 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   Users? users;
   String name = "";
 

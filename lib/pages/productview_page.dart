@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:custom_bottom_sheet/custom_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:zarashop/pages/main_page.dart';
 
 import '../model/product_model.dart';
 
@@ -16,8 +15,8 @@ class ProductViewPage extends StatefulWidget {
 }
 
 class _ProductViewPageState extends State<ProductViewPage> {
-
   bool isLiked = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,8 +33,9 @@ class _ProductViewPageState extends State<ProductViewPage> {
                   // margin: const EdgeInsets.symmetric(horizontal: 10),
                   clipBehavior: Clip.hardEdge,
                   decoration: const BoxDecoration(
-                      // color: Colors.black,
-                      ),
+                      borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(50),
+                  )),
                   child: Swiper(
                     loop: true,
                     itemCount: widget.product!.imgUrls!.length,
@@ -58,66 +58,86 @@ class _ProductViewPageState extends State<ProductViewPage> {
                     },
                   ),
                 ),
-               Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
-                   Row(
-                     children: [
-                       Column(
-                         children: [
-                           const SizedBox(height: 50,),
-                         Row(
-                           children: [
-                             SizedBox(width: 20,),
-                             CircleAvatar(
-                               backgroundColor: Colors.grey.shade200,
-                               child: IconButton(
-                                   onPressed: () {
-                                     Navigator.pop(context);
-                                   },
-                                   icon: const Icon(Icons.arrow_back_ios_sharp,color: Colors.black54,)),
-                             ),
-                           ],
-                         )
-                         ],
-                       )
-                     ],
-                   ),
-                   Row(
-                     children: [
-                       Column(
-                         children: [
-                           const SizedBox(height: 50,),
-                           Row(
-                             children: [
-                               CircleAvatar(
-                                 backgroundColor: Colors.grey.shade200,
-                                 child:    IconButton(
-                                   onPressed: (){
-                                     // setState((){
-                                     //   post.isLiked = !post.isLiked;
-                                     // });
-                                     // DataService.likePost(post, post.isLiked);
-                                   },
-                                   icon: (isLiked==true) ?
-                                   const Icon(Icons.favorite_border, color: Colors.red,) :
-                                   const Icon(Icons.favorite, color: Colors.red,) ,
-                                 ),
-                               ),
-                               SizedBox(width: 20,),
-                             ],
-                           )
-                         ],
-                       )
-                     ],
-                   ),
-                 ],
-               )
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                CircleAvatar(
+                                  backgroundColor: Colors.grey.shade200,
+                                  child: IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(
+                                        Icons.arrow_back_ios_sharp,
+                                        color: Colors.black54,
+                                      )),
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.grey.shade200,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      // setState((){
+                                      //   post.isLiked = !post.isLiked;
+                                      // });
+                                      // DataService.likePost(post, post.isLiked);
+                                    },
+                                    icon: (isLiked == true)
+                                        ? const Icon(
+                                            Icons.favorite_border,
+                                            color: Colors.red,
+                                          )
+                                        : const Icon(
+                                            Icons.favorite,
+                                            color: Colors.red,
+                                          ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
             //description
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: const BoxDecoration(
+                  borderRadius:
+                      BorderRadius.only(topRight: Radius.circular(50))),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -126,22 +146,14 @@ class _ProductViewPageState extends State<ProductViewPage> {
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  //price
-                  Text(
-                    widget.product!.price!,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                        color: Colors.deepOrange),
-                  ),
                   //star
                   Row(
-                    children:const [
-                       Image(
+                    children: const [
+                      Image(
                         image: AssetImage("assets/images/star.jpg"),
                         width: 150,
                       ),
-                       Text(
+                      Text(
                         "4.9",
                         style: TextStyle(fontSize: 30),
                       ),
@@ -170,32 +182,75 @@ class _ProductViewPageState extends State<ProductViewPage> {
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(15),
-                  child: Column(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.shopping_cart_outlined,
-                          size: 40,
-                        ),
+            Container(
+              height: 120,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey.shade300,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 15),
+                    width: 120,
+                    height: 20 + 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.green,
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.shopping_cart,
+                        color: Colors.white,
                       ),
-                      const Text(
-                        "Buy",
-                        style: TextStyle(fontSize: 30),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
-            )
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 15),
+                    width: 250,
+                    height: 70,
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: TextButton(
+                      onPressed: () {
+                        customBottomSheet(context);
+                      },
+                      child: Text(
+                        "${widget.product!.price} Add to card",
+                        style: const TextStyle(color: Colors.white, fontSize: 25),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ],
         )
       ],
     ));
+  }
+
+  void customBottomSheet(BuildContext context) {
+    SlideDialog.showSlideDialog(
+      context: context,
+      backgroundColor: Colors.white,
+      pillColor: Colors.yellow,
+      transitionDuration: const Duration(milliseconds: 300),
+      child: Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text("size"),
+          ],
+        ),
+      ),
+    );
   }
 }

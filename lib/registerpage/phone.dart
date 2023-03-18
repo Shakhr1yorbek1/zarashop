@@ -1,14 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'dart:ui';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../service/Utils.dart';
 import '../model/user_model.dart';
 import '../pages/main_page.dart';
+import '../service/Utils.dart';
 import '../service/data_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -60,38 +58,38 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
 
                     //#fullName
-                    // TextField(
-                    //   controller: Namecontroller,
-                    //   decoration: const InputDecoration(
-                    //     hintText: 'Name',
-                    //     prefix: Padding(
-                    //       padding: EdgeInsets.all(4),
-                    //     ),
-                    //   ),
-                    //   maxLength: 20,
-                    // ),
-                    //#email
-                    // TextField(
-                    //   controller: Lastnamecontroller,
-                    //   decoration: const InputDecoration(
-                    //     hintText: 'Last Name',
-                    //     prefix: Padding(
-                    //       padding: EdgeInsets.all(4),
-                    //     ),
-                    //   ),
-                    //   maxLength: 20,
-                    // ),
-                    //#password
-                    // TextField(
-                    //   controller: Gmailcontroller,
-                    //   decoration: const InputDecoration(
-                    //     hintText: 'Gmail (Optional)',
-                    //     prefix: Padding(
-                    //       padding: EdgeInsets.all(4),
-                    //     ),
-                    //   ),
-                    //   maxLength: 20,
-                    // ),
+                    TextField(
+                      controller: Namecontroller,
+                      decoration: const InputDecoration(
+                        hintText: 'Name',
+                        prefix: Padding(
+                          padding: EdgeInsets.all(4),
+                        ),
+                      ),
+                      maxLength: 20,
+                    ),
+                   // #email
+                    TextField(
+                      controller: Lastnamecontroller,
+                      decoration: const InputDecoration(
+                        hintText: 'Last Name',
+                        prefix: Padding(
+                          padding: EdgeInsets.all(4),
+                        ),
+                      ),
+                      maxLength: 20,
+                    ),
+                  //  #password
+                    TextField(
+                      controller: Gmailcontroller,
+                      decoration: const InputDecoration(
+                        hintText: 'Gmail (Optional)',
+                        prefix: Padding(
+                          padding: EdgeInsets.all(4),
+                        ),
+                      ),
+                      maxLength: 20,
+                    ),
 
                     TextField(
                       controller: phoneController,
@@ -258,8 +256,6 @@ class _LoginScreenState extends State<LoginScreen> {
     String lastname = Lastnamecontroller.text.trim();
     String gmail = Gmailcontroller.text.trim();
 
-
-
     Users users = Users(
       phone: phoneN,
       name: name,
@@ -268,6 +264,5 @@ class _LoginScreenState extends State<LoginScreen> {
     users.uid = uid;
     print(users.uid);
     await DataService.storeUser(users);
-
   }
 }

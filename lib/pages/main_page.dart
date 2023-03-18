@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:zarashop/pages/settings_page.dart';
-import 'package:zarashop/service/data_service.dart';
-import '../model/user_model.dart';
+
 import '../registerpage/phone.dart';
 import '../service/auth_service.dart';
 import 'home_page.dart';
@@ -13,6 +10,7 @@ import 'market_page.dart';
 
 class MainPage extends StatefulWidget {
   final bool? dataSaved;
+
   const MainPage({super.key, this.dataSaved});
 
   @override
@@ -25,7 +23,7 @@ class _MainPageState extends State<MainPage> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    (AuthService.isLoggedIn()) ? LikesPage():LoginScreen()  ,
+    (AuthService.isLoggedIn()) ? LikesPage() : LoginScreen(),
     (AuthService.isLoggedIn()) ? marketPage() : LoginScreen(),
     (AuthService.isLoggedIn()) ? SettingPage() : LoginScreen(),
   ];
@@ -123,16 +121,18 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-
   Future<void> initPage() async {
-    await Future.delayed(Duration(microseconds: 1),);
+    await Future.delayed(
+      Duration(microseconds: 1),
+    );
     isLogged = AuthService.isLoggedIn();
-    if(isLogged) {
+    if (isLogged) {
     } else {
       setState(() {
-      _selectedIndex=0;
+        _selectedIndex = 0;
       });
-      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
     }
   }
 

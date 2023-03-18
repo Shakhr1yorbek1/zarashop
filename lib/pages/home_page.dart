@@ -3,7 +3,6 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shimmer/shimmer.dart';
@@ -22,7 +21,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,12 +165,13 @@ class HomePageState extends State<HomePage> {
                   Column(
                     children: itemOfCategory,
                   ),
-                  (isLoading) ?
-                  Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(20),
-                    child: const CircularProgressIndicator(),
-                  ) : const SizedBox(),
+                  (isLoading)
+                      ? Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(20),
+                          child: const CircularProgressIndicator(),
+                        )
+                      : const SizedBox(),
                 ],
               )
             ],
@@ -277,7 +276,6 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-
   Future<void> getProducts() async {
     setState(() {
       isLoading = true;
@@ -285,10 +283,10 @@ class HomePageState extends State<HomePage> {
       itemOfCategory = [];
     });
     await RTDBService.getCategory().then((value) => {
-      setState(() {
-        categoryNames = value;
-      }),
-    });
+          setState(() {
+            categoryNames = value;
+          }),
+        });
     for (int i = 0; i < categoryNames.length; i++) {
       await DataService.getOfCategory(categoryNames[i]).then((value) {
         if (value.isNotEmpty) {

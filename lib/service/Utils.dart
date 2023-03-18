@@ -1,8 +1,8 @@
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 
 class Utils {
   static Future<bool> commanDialog(

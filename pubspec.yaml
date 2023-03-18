@@ -22,6 +22,7 @@ dependencies:
   cloud_firestore: ^4.3.1
   fluttertoast: ^8.1.3
   firebase_app_check: ^0.1.1+13
+  firebase_ui_firestore: ^1.2.9
   # other
   google_nav_bar: ^5.0.6
   card_swiper: ^2.0.4
@@ -33,7 +34,7 @@ dependencies:
   platform_device_id: ^1.0.1
   loading_indicator: ^3.1.0
   page_transition: ^2.0.9
-  firebase_ui_firestore: ^1.2.9
+  custom_bottom_sheet: ^1.1.2
 
 
 
